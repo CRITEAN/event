@@ -48,7 +48,12 @@ class EventSession(models.Model):
         store=True, readonly=True, compute='_compute_seats')
     seats_expected = fields.Integer(
         string='Number of Expected Attendees',
-        readonly=True, compute='_compute_seats')
+        readonly=True, compute='_compute_seats',
+        store=True)
+    seats_available_expected = fields.Integer(
+        string='Available Expected Seats',
+        readonly=True, compute='_compute_seats',
+        store=True)
     date_tz = fields.Selection(
         string='Timezone', related="event_id.date_tz",
     )
@@ -165,6 +170,8 @@ class EventSession(models.Model):
             session.seats_expected = (
                 session.seats_unconfirmed + session.seats_reserved +
                 session.seats_used)
+            session.seats_available_expected = (
+                session.seats_max - session.seats_expected)
 
     @api.multi
     @api.depends('date_tz', 'date_begin')
@@ -241,5 +248,7 @@ class EventSession(models.Model):
         action = self.env.ref(
             'event.act_event_registration_from_event').read()[0]
         action['domain'] = [('id', 'in', self.registration_ids.ids)]
-        action['context'] = {}
+        action['context'] = {
+            'default_session_id': self.id,
+        }
         return action
