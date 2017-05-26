@@ -61,3 +61,14 @@ class EventRegistration(models.Model):
                     (1 if self.state == 'draft' else 0)):
                 raise ValidationError(
                     _('No more seats available for this event.'))
+
+    @api.multi
+    def confirm_registration(self):
+        for reg in self:
+            if not reg.event_id.session_ids:
+                super(EventRegistration, self).confirm_registration()
+            reg.state = 'open'
+            onsubscribe_schedulers = \
+                reg.session_id.event_mail_ids.filtered(
+                    lambda s: s.interval_type == 'after_sub')
+            onsubscribe_schedulers.execute()

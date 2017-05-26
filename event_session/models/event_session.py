@@ -83,13 +83,17 @@ class EventSession(models.Model):
         comodel_name='event.mail',
         inverse_name='session_id',
         string='Mail Schedule',
-        copy=True)
+        copy=True
+    )
 
     @api.multi
     @api.depends('date_begin', 'date_end')
     def _compute_name(self):
         setlocale(LC_ALL, locale=(self.env.lang, 'UTF-8'))
         for session in self:
+            if not (session.date_begin and session.date_end):
+                session.name = '/'
+                continue
             date_begin = fields.Datetime.from_string(session.date_begin)
             date_end = fields.Datetime.from_string(session.date_end)
             dt_format = '%A %d/%m/%y %H:%M'
@@ -99,26 +103,23 @@ class EventSession(models.Model):
             name += " - " + date_end.strftime(dt_format)
             session.name = name.capitalize()
 
-    @api.model
-    def _set_session_mail_ids(self, event_id):
-        return [(0, 0, {
-            'event_id': event_id,
-            'interval_unit': 'now',
-            'interval_type': 'after_sub',
-            'template_id': self.env.ref('event.event_subscription').id
-        }), (0, 0, {
-            'event_id': event_id,
-            'interval_nbr': 2,
-            'interval_unit': 'days',
-            'interval_type': 'before_event',
-            'template_id': self.env.ref('event.event_reminder').id
-        }), (0, 0, {
-            'event_id': event_id,
-            'interval_nbr': 15,
-            'interval_unit': 'days',
-            'interval_type': 'before_event',
-            'template_id': self.env.ref('event.event_reminder').id
-        })]
+    def _session_mails_from_template(self, event_id, mail_template=None):
+        vals = [(6, 0, [])]
+        if not mail_template:
+            mail_template = self.env['ir.values'].get_default(
+                'event.config.settings', 'event_mail_template_id')
+        if isinstance(mail_template, int):
+            mail_template = self.env['event.mail.template'].browse(
+                mail_template)
+        for scheduler in mail_template.scheduler_template_ids:
+            vals.append((0, 0, {
+                'event_id': event_id,
+                'interval_nbr': scheduler.interval_nbr,
+                'interval_unit': scheduler.interval_unit,
+                'interval_type': scheduler.interval_type,
+                'template_id': scheduler.template_id.id,
+            }))
+        return vals
 
     @api.multi
     def name_get(self):
@@ -132,9 +133,10 @@ class EventSession(models.Model):
 
     @api.model
     def create(self, vals):
-        if 'event_mail_ids' not in vals:
+        if not vals.get('event_mail_ids', False):
             vals.update({
-                'event_mail_ids': self._set_session_mail_ids(vals['event_id'])
+                'event_mail_ids':
+                    self._session_mails_from_template(vals['event_id'])
             })
         return super(EventSession, self).create(vals)
 
@@ -251,6 +253,7 @@ class EventSession(models.Model):
             'event.act_event_registration_from_event').read()[0]
         action['domain'] = [('id', 'in', self.registration_ids.ids)]
         action['context'] = {
+            'default_event_id': self.event_id.id,
             'default_session_id': self.id,
         }
         return action
