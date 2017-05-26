@@ -93,11 +93,7 @@ class EventSession(models.Model):
             date_begin = fields.Datetime.from_string(session.date_begin)
             date_end = fields.Datetime.from_string(session.date_end)
             dt_format = '%A %d/%m/%y %H:%M'
-            if date_begin != 'None':
-                continue
             name = date_begin.strftime(dt_format)
-            if date_end != 'None':
-                continue
             if date_begin.date() == date_end.date():
                 dt_format = '%H:%M'
             name += " - " + date_end.strftime(dt_format)
