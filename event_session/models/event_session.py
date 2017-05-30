@@ -108,6 +108,9 @@ class EventSession(models.Model):
         if not mail_template:
             mail_template = self.env['ir.values'].get_default(
                 'event.config.settings', 'event_mail_template_id')
+            if not mail_template:
+                # Not template scheduler defined in event settings
+                return vals
         if isinstance(mail_template, int):
             mail_template = self.env['event.mail.template'].browse(
                 mail_template)
