@@ -32,7 +32,7 @@ class ReportEventRegistration(models.Model):
             AS seats_expected,
             sub.seats_available_expected
         """
-    
+
     def _sub_select(self):
         select_str = super(ReportEventRegistration, self)._sub_select()
         return select_str + """

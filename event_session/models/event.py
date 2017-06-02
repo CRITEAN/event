@@ -23,7 +23,7 @@ class EventEvent(models.Model):
     def _compute_sessions_count(self):
         for event in self:
             event.sessions_count = len(event.session_ids)
-    
+
     @api.model
     def create(self, vals):
         event = super(EventEvent, self).create(vals)
