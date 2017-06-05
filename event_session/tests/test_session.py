@@ -91,10 +91,10 @@ class EventSession(common.SavepointCase):
         self.assertEqual(res['domain'], [('id', 'in', attendees.ids)])
 
     def test_assign_mail_template(self):
-        self.session._set_session_mail_ids(self.event.id)
-        self.assertEqual(len(self.session.event_mail_ids), 3)
-        self.session._set_session_mail_ids(self.template)
-        self.assertEqual(len(self.session.event_mail_ids), 3)
+        self.session._session_mails_from_template(self.event.id)
+        self.assertEqual(len(self.session.event_mail_ids), 1)
+        self.session._session_mails_from_template(self.event.id, self.template)
+        self.assertEqual(len(self.session.event_mail_ids), 1)
 
     def test_session_seats(self):
         """ Session seat """
