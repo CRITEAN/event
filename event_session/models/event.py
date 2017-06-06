@@ -21,6 +21,7 @@ class EventEvent(models.Model):
     )
 
     @api.multi
+    @api.depends('session_ids')
     def _compute_sessions_count(self):
         for event in self:
             event.sessions_count = len(event.session_ids)
