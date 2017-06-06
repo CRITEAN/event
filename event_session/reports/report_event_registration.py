@@ -22,6 +22,8 @@ class ReportEventRegistration(models.Model):
         string='Available seats', readonly=True, group_operator="min")
     seats_available_expected = fields.Integer(
         string='Available expected seats', readonly=True, group_operator="min")
+    session_count = fields.Integer(
+        string="# of Event Sessions", readonly=True, group_operator="min")
 
     def _select(self):
         select_str = super(ReportEventRegistration, self)._select()
@@ -30,7 +32,8 @@ class ReportEventRegistration(models.Model):
             sub.seats_available AS seats_available,
             (sub.draft_state + sub.confirm_state - sub.cancel_state)
             AS seats_expected,
-            sub.seats_available_expected
+            sub.seats_available_expected,
+            sub.session_count
         """
 
     def _sub_select(self):
@@ -38,7 +41,8 @@ class ReportEventRegistration(models.Model):
         return select_str + """
             , MIN(r.session_id) AS session_id,
             MIN(es.seats_available) as seats_available,
-            MAX(es.seats_available_expected) AS seats_available_expected
+            MAX(es.seats_available_expected) AS seats_available_expected,
+            MIN(e.sessions_count) AS session_count
         """
 
     def _from(self):

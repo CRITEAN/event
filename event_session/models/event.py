@@ -17,6 +17,7 @@ class EventEvent(models.Model):
     sessions_count = fields.Integer(
         compute='_compute_sessions_count',
         string='Total event sessions',
+        store=True,
     )
 
     @api.multi
