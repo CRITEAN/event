@@ -30,7 +30,7 @@ class ReportEventRegistration(models.Model):
         return select_str + """
             , sub.session_id,
             sub.seats_available AS seats_available,
-            (sub.draft_state + sub.confirm_state - sub.cancel_state)
+            (sub.draft_state + sub.confirm_state)
             AS seats_expected,
             sub.seats_available_expected,
             sub.session_count
