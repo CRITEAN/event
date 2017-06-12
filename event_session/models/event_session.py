@@ -19,6 +19,11 @@ class EventSession(models.Model):
     active = fields.Boolean(
         default=True,
     )
+    company_id = fields.Many2one(
+        comodel_name='res.company',
+        related='event_id.company_id',
+        store=True,
+    )
     event_id = fields.Many2one(
         comodel_name='event.event',
         string='Event',
