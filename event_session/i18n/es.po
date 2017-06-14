@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-14 10:24+0000\n"
-"PO-Revision-Date: 2017-06-14 12:31+0200\n"
+"POT-Creation-Date: 2017-06-14 11:25+0000\n"
+"PO-Revision-Date: 2017-06-14 13:27+0200\n"
 "Last-Translator: David <david.vidal@tecnativa.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -72,6 +72,11 @@ msgstr "Cancelar"
 #: model:ir.model.fields,help:event_session.field_wizard_event_session_delete_existing_sessions
 msgid "Check in order to delete every previous session for this event"
 msgstr "Seleccionar para borrar todas las sesiones existentes en este evento."
+
+#. module: event_session
+#: model:ir.model.fields,field_description:event_session.field_event_session_company_id
+msgid "Company"
+msgstr "Compañía"
 
 #. module: event_session
 #: model:ir.model.fields,help:event_session.field_wizard_event_session_fridays
@@ -160,7 +165,7 @@ msgid "End time"
 msgstr "Hora de fin"
 
 #. module: event_session
-#: code:addons/event_session/models/event_session.py:249
+#: code:addons/event_session/models/event_session.py:254
 #, python-format
 msgid "Ending and starting time can't be the same!"
 msgstr "La hora de comienzo y de fin no puede ser la misma"
@@ -292,7 +297,7 @@ msgid "Mondays"
 msgstr "Lunes"
 
 #. module: event_session
-#: code:addons/event_session/models/event_session.py:229
+#: code:addons/event_session/models/event_session.py:234
 #, python-format
 msgid "No more available seats for this session."
 msgstr "No hay más plazas disponibles para esta sesión."
@@ -376,7 +381,7 @@ msgid "Session date end"
 msgstr "Fecha de fin de sesión"
 
 #. module: event_session
-#: code:addons/event_session/models/event_session.py:240
+#: code:addons/event_session/models/event_session.py:245
 #, python-format
 msgid "Session date is out of this event dates range"
 msgstr "La fecha de la sesión está fuera del rango de fechas de este evento"
@@ -450,7 +455,7 @@ msgid "There are overlapping hours!"
 msgstr "¡Hay horarios superpuestos!"
 
 #. module: event_session
-#: code:addons/event_session/wizards/wizard_event_session.py:203
+#: code:addons/event_session/wizards/wizard_event_session.py:204
 #, python-format
 msgid "There are sessions with no duration!"
 msgstr "¡Hay horarios con duración nula!"
@@ -467,10 +472,40 @@ msgid "Timezone"
 msgstr "Zona horaria"
 
 #. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total available expected seats"
+msgstr "Total plazas disponibles previstas"
+
+#. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total available seats"
+msgstr "Total plazas disponibles"
+
+#. module: event_session
 #: model:ir.model.fields,field_description:event_session.field_event_event_sessions_count
 #: model:ir.model.fields,field_description:event_session.field_event_registration_event_sessions_count
 msgid "Total event sessions"
 msgstr "Sesiones de evento totales"
+
+#. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total seats"
+msgstr "Total plazas"
+
+#. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total seats expected"
+msgstr "Total plazas previstas"
+
+#. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total seats reserved"
+msgstr "Total plazas reservadas"
+
+#. module: event_session
+#: model:ir.ui.view,arch_db:event_session.view_event_session_tree
+msgid "Total seats unconfirmed"
+msgstr "Total plazas sin confirmar"
 
 #. module: event_session
 #: model:ir.model.fields,field_description:event_session.field_wizard_event_session_tuesdays
@@ -503,13 +538,13 @@ msgid "Wizard event session id"
 msgstr "Wizard event session id"
 
 #. module: event_session
-#: code:addons/event_session/wizards/wizard_event_session.py:180
+#: code:addons/event_session/wizards/wizard_event_session.py:181
 #, python-format
 msgid "You must select at least one weekday"
 msgstr "Debes seleccionar al menos un día de la semana"
 
 #. module: event_session
-#: code:addons/event_session/wizards/wizard_event_session.py:212
+#: code:addons/event_session/wizards/wizard_event_session.py:213
 #, python-format
 msgid "You've entered invalid hours!"
 msgstr "¡Las horas introducidas son erróneas!"
