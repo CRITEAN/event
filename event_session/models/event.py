@@ -19,6 +19,7 @@ class EventEvent(models.Model):
         string='Total event sessions',
         store=True,
     )
+    seats_expected = fields.Integer(store=True)
 
     @api.multi
     @api.depends('session_ids')
