@@ -95,7 +95,8 @@ class EventSession(common.SavepointCase):
     # def test_assign_mail_template(self):
     #     self.session._session_mails_from_template(self.event.id)
     #     self.assertEqual(len(self.session.event_mail_ids), 1)
-    #     self.session._session_mails_from_template(self.event.id, self.template)
+    #     self.session._session_mails_from_template(
+    #         self.event.id, self.template)
     #     self.assertEqual(len(self.session.event_mail_ids), 1)
 
     def test_session_seats(self):
