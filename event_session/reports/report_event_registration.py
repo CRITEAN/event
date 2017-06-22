@@ -15,7 +15,8 @@ class ReportEventRegistration(models.Model):
         required=True,
         readonly=True,
     )
-    seats_expected = fields.Integer(string="Seats expected", readonly=True)
+    seats_expected = fields.Integer(string="Seats expected", readonly=True,
+                                    group_operator="max")
     seats_max = fields.Integer(group_operator="max")
     seats_available = fields.Integer(
         string='Available seats', readonly=True, group_operator="min")
@@ -27,6 +28,9 @@ class ReportEventRegistration(models.Model):
     def _select(self):
         return super(ReportEventRegistration, self)._select() + """,
             MIN(r.session_id) AS session_id,
+            COALESCE(MAX(es.seats_expected),
+                     MAX(e.seats_expected))
+                AS seats_expected,
             COALESCE(MIN(es.seats_available), MIN(e.seats_available))
                 AS seats_available,
             COALESCE(MAX(es.seats_available_expected),
