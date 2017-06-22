@@ -5,6 +5,7 @@
 
 from odoo.tests import common
 from odoo.exceptions import ValidationError
+from psycopg2 import IntegrityError
 
 
 class EventSession(common.SavepointCase):
@@ -128,6 +129,9 @@ class EventSession(common.SavepointCase):
         # delete previous sessions
         self.wizard.update({'delete_existing_sessions': True})
         self.wizard.update({'event_mail_template_id': self.template})
+        with self.assertRaises(IntegrityError), self.cr.savepoint():
+            self.wizard.action_generate_sessions()
+        self.attendee.session_id = False
         self.wizard.action_generate_sessions()
         sessions = self.env['event.session'].search([
             ['event_id', '=', self.event.id]
