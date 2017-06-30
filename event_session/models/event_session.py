@@ -59,6 +59,11 @@ class EventSession(models.Model):
         string='Available Expected Seats',
         readonly=True, compute='_compute_seats',
         store=True)
+    seats_available_pc = fields.Float(
+        string='Full %',
+        readonly=True,
+        compute='_compute_seats',
+    )
     date_tz = fields.Selection(
         string='Timezone', related="event_id.date_tz",
     )
@@ -185,6 +190,8 @@ class EventSession(models.Model):
                 session.seats_used)
             session.seats_available_expected = (
                 session.seats_max - session.seats_expected)
+            session.seats_available_pc = (
+                session.seats_expected * 100 / float(session.seats_max))
 
     @api.multi
     @api.depends('date_tz', 'date_begin')
