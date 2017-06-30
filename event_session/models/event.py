@@ -53,9 +53,8 @@ class EventRegistration(models.Model):
     def _check_seats_limit(self):
         for registration in self.filtered('session_id'):
             if (registration.session_id.seats_availability == 'limited' and
-                    registration.session_id.seats_max and
-                    registration.session_id.seats_available <
-                    (1 if registration.state == 'draft' else 0)):
+                    registration.session_id.seats_available < 1 and
+                    registration.state == 'open'):
                 raise ValidationError(
                     _('No more seats available for this event.'))
 
