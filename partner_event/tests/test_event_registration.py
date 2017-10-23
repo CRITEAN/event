@@ -3,9 +3,11 @@
 # © 2015 Tecnativa S.L. - Javier Iniesta
 # © 2016 Tecnativa S.L. - Antonio Espinosa
 # © 2016 Tecnativa S.L. - Vicent Cubells
+# Copyright 2017 Tecnativa - David Vidal
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests.common import TransactionCase
+from odoo.exceptions import UserError, MissingError
 from datetime import datetime, timedelta
 
 
@@ -73,3 +75,15 @@ class TestEventRegistration(TransactionCase):
         self.partner_01.write({'email': 'new@test.com'})
         self.assertEqual(
             event_2.registration_ids.email, 'new@test.com')
+
+    def test_unlink(self):
+        # We can't delete a partner with registrations
+        with self.assertRaises(UserError):
+            self.partner_01.unlink()
+        # Create a brand new partner and delete it
+        partner3 = self.env['res.partner'].create({
+            'name': 'unregistered partner'
+        })
+        partner3.unlink()
+        with self.assertRaises(MissingError):
+            partner3.name

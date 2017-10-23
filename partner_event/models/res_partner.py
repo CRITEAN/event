@@ -5,7 +5,8 @@
 # © 2016 Tecnativa S.L. - Vicent Cubells
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
@@ -54,3 +55,11 @@ class ResPartner(models.Model):
         res = super(ResPartner, self).write(data)
         self.mapped('registrations').partner_data_update(data)
         return res
+
+    @api.multi
+    def unlink(self):
+        if self.registration_count > 0:
+            raise UserError(
+                _("You can't delete a partner with related events")
+            )
+        return super(ResPartner, self).unlink()
