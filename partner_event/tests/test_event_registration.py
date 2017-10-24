@@ -7,9 +7,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests.common import TransactionCase
-from odoo.exceptions import UserError, MissingError
+from psycopg2 import IntegrityError
 from datetime import datetime, timedelta
-
 
 class TestEventRegistration(TransactionCase):
 
@@ -76,14 +75,13 @@ class TestEventRegistration(TransactionCase):
         self.assertEqual(
             event_2.registration_ids.email, 'new@test.com')
 
-    def test_unlink(self):
+    def test_delete_registered_partner(self):
         # We can't delete a partner with registrations
-        with self.assertRaises(UserError):
+        with self.assertRaises(IntegrityError), self.cr.savepoint():
             self.partner_01.unlink()
         # Create a brand new partner and delete it
         partner3 = self.env['res.partner'].create({
-            'name': 'unregistered partner'
+            'name': 'unregistered partner',
         })
         partner3.unlink()
-        with self.assertRaises(MissingError):
-            partner3.name
+        self.assertFalse(partner3.exists())

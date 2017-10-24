@@ -11,6 +11,10 @@ from odoo import api, fields, models
 class EventRegistration(models.Model):
     _inherit = "event.registration"
 
+    partner_id = fields.Many2one(
+        ondelete='restrict',
+    )
+
     def _prepare_partner(self, vals):
         return {
             'name': vals.get('name') or vals.get('email'),
