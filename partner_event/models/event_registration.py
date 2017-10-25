@@ -34,7 +34,6 @@ class EventRegistration(models.Model):
                 [('email', '=ilike', email)], limit=1)
             event = event_model.browse(vals['event_id'])
             if partner:
-                partner_id = partner.id
                 vals['name'] = vals.get('name') or partner.name
                 vals['phone'] = vals.get('phone') or partner.phone
             elif event.create_partner:
@@ -42,7 +41,7 @@ class EventRegistration(models.Model):
                 partner = partner_model.sudo().create(
                     self._prepare_partner(vals))
                 partner_id = partner.id
-            vals['partner_id'] = partner_id
+            vals['partner_id'] = partner.id
         return super(EventRegistration, self).create(vals)
 
     @api.multi
